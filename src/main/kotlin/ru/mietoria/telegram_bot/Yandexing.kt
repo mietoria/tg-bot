@@ -10,6 +10,12 @@ fun searching(message: CommonMessage<TextContent>): Pair<String, String> {
         .userAgent("Mozilla/5.0")
         .timeout(10000)
         .get()
+    if (doc.select("div.CheckboxCaptcha").size > 0) {
+        return Pair("CaptchaError", "Can't process the request, Yandex requires to solve Captcha.")
+    }
+    else if (doc.select("div.misspell__message").size > 0) {
+        return Pair("NothingFound", "Nothing found for your request")
+    }
     val link =
         doc.select(".VanillaReact.OrganicTitle.OrganicTitle_wrap.Typo.Typo_text_l.Typo_line_m.organic__title-wrapper")
             .select("a[href]").attr("href")
