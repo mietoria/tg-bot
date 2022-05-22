@@ -9,6 +9,7 @@ import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onComman
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onText
 import dev.inmo.tgbotapi.extensions.utils.formatting.*
 import dev.inmo.tgbotapi.extensions.utils.whenWithUser
+import dev.inmo.tgbotapi.types.MessageEntity.textsources.link
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.abstracts.Message
 import dev.inmo.tgbotapi.types.message.content.TextContent
@@ -33,7 +34,7 @@ suspend fun main() {
         }
 
         onText {
-            justGoogleIt(bot, it)
+            justYandexIt(bot, it)
         }
     }.join()
 }
@@ -54,7 +55,7 @@ suspend fun commandHelp(bot: TelegramBot, message: Message) {
 }
 
 @OptIn(RiskFeature::class, PreviewFeature::class)
-suspend fun justGoogleIt(
+suspend fun justYandexIt(
     bot: TelegramBot,
     message: CommonMessage<TextContent>
 ) {
@@ -62,7 +63,7 @@ suspend fun justGoogleIt(
     if (messageText.startsWith("/")) {
         return
     }
-
-    //bot.sendMessage(message.chat.id, buildEntities { link("link", "vk.com") })
-    bot.sendTextMessage(message.chat.id, buildEntities { link("link", searching(message)) })
+    println(message.content.text)
+    bot.sendTextMessage(
+        message.chat.id, buildEntities(" ") { link("link", searching(message).first) + searching(message).second})
 }
