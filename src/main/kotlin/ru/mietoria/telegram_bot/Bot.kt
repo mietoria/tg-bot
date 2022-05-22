@@ -64,6 +64,19 @@ suspend fun justYandexIt(
         return
     }
     println(message.content.text)
-    bot.sendTextMessage(
-        message.chat.id, buildEntities(" ") { link("link", searching(message).first) + searching(message).second})
+    val res = searching(message)
+    when (res.first) {
+        "CaptchaError" -> {
+            println(res.second)
+            bot.sendTextMessage(message.chat.id, res.second)
+        }
+        "NothingFound" -> {
+            println(res.second)
+            bot.sendTextMessage(message.chat.id, res.second)
+        }
+        else -> {
+            bot.sendTextMessage(
+                message.chat.id, buildEntities(" ") { link("link", res.first) + res.second })
+        }
+    }
 }
